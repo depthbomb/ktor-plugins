@@ -1,0 +1,24 @@
+# Gradle and Kotlin outputs, including the build-logic included build
+.gradle/
+.kotlin/
+build/
+out/
+hs_err_pid*.log
+*.hprof
+
+# Local IDE and OS files
+.idea/
+*.iml
+local.properties
+.DS_Store
+Thumbs.db
+
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+*.gpg
+*.kbx
+*.asc
+*.p12
+*.jks
