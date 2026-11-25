@@ -1,9 +1,7 @@
 plugins {
     id("io.github.depthbomb.ktor-library")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
-
-// The integration tests declare typed Ktor Resources.
-apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
 version = "0.1.0"
 description = "Signed URL generation and validation for Ktor Server."
