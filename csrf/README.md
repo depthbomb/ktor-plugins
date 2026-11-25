@@ -5,7 +5,7 @@ where the token goes in the frontend, where to check it, and what the user sees 
 
 ## Installation
 
-Add Maven Central to your repositories and install the latest version.
+Add Maven Central to your repositories and add the plugin to your Ktor application.
 
 ```kotlin
 dependencies {

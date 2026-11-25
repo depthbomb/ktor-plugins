@@ -5,8 +5,8 @@ policy is available from application code.
 
 ## Installation
 
-Add Maven Central to your repositories and install the latest version. The example uses Ktor authentication to look up
-the user and StatusPages to turn a rejection into an HTTP response.
+Add Maven Central to your repositories and add the plugin to your Ktor application. The example uses Ktor authentication
+to look up the user and StatusPages to turn a rejection into an HTTP response.
 
 ```kotlin
 dependencies {

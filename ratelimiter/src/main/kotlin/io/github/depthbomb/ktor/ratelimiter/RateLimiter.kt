@@ -178,6 +178,7 @@ private val guard = createRouteScopedPlugin("io.github.depthbomb.ktor.ratelimite
         val decision = policy.tryAcquire(policy.identifier(call), cost)
         // Round up so a client waiting for a full refill never sees an earlier second.
         val reset = decision.balance.resetAt
+
         call.response.header("X-RateLimit-Limit", policy.rate.capacity.toString())
         call.response.header("X-RateLimit-Remaining", decision.balance.remaining.toString())
         call.response.header("X-RateLimit-Reset", (reset.epochSecond + if (reset.nano > 0) 1 else 0).toString())

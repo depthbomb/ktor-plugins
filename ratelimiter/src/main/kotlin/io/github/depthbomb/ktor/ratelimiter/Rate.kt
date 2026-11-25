@@ -29,12 +29,15 @@ public class Rate internal constructor(
         require(period.isPositive() && period.isFinite() && period.inWholeNanoseconds.nanoseconds == period) {
             "Period must fit in nanoseconds"
         }
+
         // Reducing the fraction keeps the refill math exact and gives 1 per minute the same units as 2 per 2 minutes.
         val nanoseconds = period.inWholeNanoseconds
         val divisor = greatestCommonDivisor(nanoseconds, tokens.toLong())
         tokenUnit = nanoseconds / divisor
         refillSpeed = (tokens / divisor).toInt()
+
         require(tokenUnit <= Long.MAX_VALUE / capacity) { "Bucket duration overflow" }
+
         maxDebt = tokenUnit * capacity
     }
 
@@ -83,9 +86,11 @@ public fun parseRate(text: String): Rate {
         "hour" -> amount.hours
         else -> amount.days
     }
+
     if (kind.equals("every", ignoreCase = true)) {
         require(count.toInt() == 1 && burst.isEmpty()) { "Pacing requires 1 every <interval>" }
         return paced(period)
     }
+
     return tokenBucket(count.toInt(), period, burst.ifEmpty { count }.toInt())
 }

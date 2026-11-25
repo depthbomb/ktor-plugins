@@ -123,6 +123,7 @@ public class MemoryRateStorage(
 
     private fun evaluate(key: BucketKey, rate: Rate, cost: Int, debit: Boolean): RateDecision {
         require(cost in 1..rate.capacity)
+
         val hash = key.hashCode()
         val bucket = buckets[(hash xor (hash ushr 16)) and (buckets.size - 1)]
         return synchronized(bucket) {
