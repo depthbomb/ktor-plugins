@@ -11,8 +11,8 @@ to look up the user and StatusPages to turn a rejection into an HTTP response.
 ```kotlin
 dependencies {
     implementation("io.github.depthbomb.ktor:ratelimiter:0.1.0")
-    implementation("io.ktor:ktor-server-auth:3.6.1")
-    implementation("io.ktor:ktor-server-status-pages:3.6.1")
+    implementation("io.ktor:ktor-server-auth:3.6.2")
+    implementation("io.ktor:ktor-server-status-pages:3.6.2")
 }
 ```
 
