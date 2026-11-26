@@ -6,6 +6,7 @@ ktor = "3.6.2"
 dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.3.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
+kotlinx-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.11.0" }
 ktor-forwarded = { module = "io.ktor:ktor-server-forwarded-header", version.ref = "ktor" }
 ktor-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
@@ -13,4 +14,5 @@ ktor-resources = { module = "io.ktor:ktor-server-resources", version.ref = "ktor
 ktor-status = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-sessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
 ktor-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+nimbus-oidc = { module = "com.nimbusds:oauth2-oidc-sdk", version = "11.39" }
 

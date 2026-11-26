@@ -61,11 +61,11 @@ fun Application.configureWriteLimits() {
 }
 ```
 
-| Definition | What one identifier can do |
-| --- | --- |
-| `5 per 3 minutes` | Spend five tokens immediately, then earn one every 36 seconds. |
-| `5 per 3 minutes, burst up to 2` | Spend up to two immediately, with the same refill rate. |
-| `1 every 36 seconds` | Start one request immediately. The next can start 36 seconds later. |
+| Definition                       | What one identifier can do                                          |
+|----------------------------------|---------------------------------------------------------------------|
+| `5 per 3 minutes`                | Spend five tokens immediately, then earn one every 36 seconds.      |
+| `5 per 3 minutes, burst up to 2` | Spend up to two immediately, with the same refill rate.             |
+| `1 every 36 seconds`             | Start one request immediately. The next can start 36 seconds later. |
 
 Definitions accept whole seconds, minutes, hours, and days. For computed values, use
 `tokenBucket(5, 3.minutes, burst = 2)` or `paced(36.seconds)`. Rejections spend zero tokens and return immediately.
@@ -73,18 +73,19 @@ Definitions accept whole seconds, minutes, hours, and days. For computed values,
 By default, a request costs one token and its identifier is the socket peer's IP address. Set `identifyBy { … }` and
 `costBy { … }` inside `policy` to customize them. Both callbacks receive the Ktor call after authentication. A cost must
 be between one and the bucket capacity. Behind a reverse proxy, use a forwarded client address only when the socket peer
-is a trusted proxy. [Authentication and proxy examples](src/test/kotlin/io/github/depthbomb/ktor/ratelimiter/RateLimiterTest.kt)
+is a trusted
+proxy. [Authentication and proxy examples](src/test/kotlin/io/github/depthbomb/ktor/ratelimiter/RateLimiterTest.kt)
 
 ## Response headers
 
 The route guard sets these headers on admission and rejection, before the handler or exception response runs.
 
-| Header | Value |
-| --- | --- |
-| `X-RateLimit-Limit` | Bucket capacity. |
-| `X-RateLimit-Remaining` | Whole tokens available after the decision. |
-| `X-RateLimit-Reset` | Unix time in seconds when the bucket will be full, rounded up. |
-| `X-RateLimit-Cost` | Attempted cost of this request. |
+| Header                  | Value                                                          |
+|-------------------------|----------------------------------------------------------------|
+| `X-RateLimit-Limit`     | Bucket capacity.                                               |
+| `X-RateLimit-Remaining` | Whole tokens available after the decision.                     |
+| `X-RateLimit-Reset`     | Unix time in seconds when the bucket will be full, rounded up. |
+| `X-RateLimit-Cost`      | Attempted cost of this request.                                |
 
 For a retry delay, use `failure.decision.retryAfter`. An empty five-token bucket may afford the next request well before
 its full reset.
@@ -108,4 +109,5 @@ The default `MemoryRateStorage` keeps balances in one process. To share quotas b
 and set `storage = yourBackend` inside `install(RateLimiter)`. Key buckets by both policy and identifier, preserve
 fractional refill credit, and check and debit atomically. Return `Limited` for insufficient quota and propagate backend
 errors. Gradle consumers can add `testImplementation(testFixtures("io.github.depthbomb.ktor:ratelimiter:0.1.0"))` to
-exercise their provider with the [storage contract fixture](src/testFixtures/kotlin/io/github/depthbomb/ktor/ratelimiter/StorageContract.kt).
+exercise their provider with
+the [storage contract fixture](src/testFixtures/kotlin/io/github/depthbomb/ktor/ratelimiter/StorageContract.kt).

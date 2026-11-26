@@ -168,6 +168,7 @@ private fun StringBuilder.appendParameter(value: String) {
                 append(HEX[char.code ushr 4])
                 append(HEX[char.code and 15])
             }
+
             else -> {
                 append(value.substring(index).encodeURLParameter())
                 return
@@ -200,6 +201,7 @@ private fun decodeComponent(encoded: String, plusIsSpace: Boolean): String? {
                 val low = bytes[read++].toInt().toChar().digitToIntOrNull(16) ?: return null
                 ((high shl 4) or low).toByte()
             }
+
             '+'.code -> if (plusIsSpace) ' '.code.toByte() else byte
             else -> byte
         }

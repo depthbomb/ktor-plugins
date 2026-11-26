@@ -18,4 +18,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ktor-server-plugins"
-include("ratelimiter", "csrf", "signedurls", "abort")
+include("ratelimiter", "csrf", "oidc", "signedurls", "abort")

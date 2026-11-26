@@ -1,13 +1,20 @@
 package io.github.depthbomb.ktor.ratelimiter
 
-import java.time.*
-import kotlin.test.*
+import kotlinx.coroutines.runBlocking
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZoneOffset
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
-import kotlinx.coroutines.runBlocking
 
 class RateTest {
-    @Test fun providerContract() = runBlocking {
+    @Test
+    fun providerContract() = runBlocking {
         var nanos = 0L
         val clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
@@ -21,7 +28,8 @@ class RateTest {
         assertEquals(5, storage.inspect(BucketKey("contract", "alice"), tokenBucket(5, 3.minutes), 1).balance.remaining)
     }
 
-    @Test fun failedClockReadDoesNotSpendQuota() = runBlocking {
+    @Test
+    fun failedClockReadDoesNotSpendQuota() = runBlocking {
         var available = false
         val clock = object : Clock() {
             override fun getZone() = ZoneOffset.UTC
@@ -40,7 +48,8 @@ class RateTest {
         Unit
     }
 
-    @Test fun incompatibleRateCannotReinterpretOutstandingDebt() = runBlocking {
+    @Test
+    fun incompatibleRateCannotReinterpretOutstandingDebt() = runBlocking {
         var now = 0L
         val storage = MemoryRateStorage({ now }, Clock.systemUTC())
         val key = BucketKey("shared", "user")
@@ -57,7 +66,8 @@ class RateTest {
         Unit
     }
 
-    @Test fun repeatedDebitsPreserveFractionalCreditAcrossPruning() = runBlocking {
+    @Test
+    fun repeatedDebitsPreserveFractionalCreditAcrossPruning() = runBlocking {
         var now = 0L
         val storage = MemoryRateStorage({ now }, Clock.systemUTC())
         val key = BucketKey("fractional", "user")
@@ -77,7 +87,8 @@ class RateTest {
         assertEquals(2, storage.inspect(key, rate, 1).balance.remaining)
     }
 
-    @Test fun largeCapacityWithReducibleRefillFraction() = runBlocking {
+    @Test
+    fun largeCapacityWithReducibleRefillFraction() = runBlocking {
         val rate = tokenBucket(1_000_000_000, 1.minutes)
         val key = BucketKey("large", "user")
         val storage = MemoryRateStorage({ 0L }, Clock.fixed(Instant.EPOCH, ZoneOffset.UTC))
@@ -86,15 +97,18 @@ class RateTest {
         assertEquals(60.nanoseconds, assertIs<Limited>(storage.inspect(key, rate, 1)).retryAfter)
     }
 
-    @Test fun definitions() {
+    @Test
+    fun definitions() {
         val rate = parseRate(" 5 PER 3 minutes, burst up to 2 ")
         assertEquals(2, rate.capacity)
         assertEquals(5, rate.tokens)
         assertEquals(3.minutes, rate.period)
         assertEquals(1, parseRate("1 per second").capacity)
         assertEquals(1, parseRate("1 every 36 seconds").capacity)
-        for (bad in listOf("5 every 3 minutes", "0 per second", "1 per 0 days", "1 per second, burst up to 0",
-            "1 every minute, burst up to 2", "1 per 9223372036854775807 days", "1000000000000 per second")) {
+        for (bad in listOf(
+            "5 every 3 minutes", "0 per second", "1 per 0 days", "1 per second, burst up to 0",
+            "1 every minute, burst up to 2", "1 per 9223372036854775807 days", "1000000000000 per second"
+        )) {
             assertFailsWith<IllegalArgumentException>(bad) { parseRate(bad) }
         }
     }

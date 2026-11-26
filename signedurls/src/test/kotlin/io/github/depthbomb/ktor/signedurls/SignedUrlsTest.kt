@@ -44,7 +44,8 @@ class SignedUrlsTest {
 
         val token = link.substringAfter("sig=")
         assertEquals("42", client.get(link).bodyAsText())
-        assertEquals("42",
+        assertEquals(
+            "42",
             client.post("http://second.example/files/42?sig=$token&flag&tag=one&tag=two&format=large+print")
                 .bodyAsText()
         )

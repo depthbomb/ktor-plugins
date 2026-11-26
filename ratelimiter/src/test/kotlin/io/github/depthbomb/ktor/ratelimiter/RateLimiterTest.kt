@@ -5,8 +5,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.forwardedheaders.*
-import io.ktor.server.plugins.origin
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -19,7 +19,8 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
 class RateLimiterTest {
-    @Test fun wrappedAndManualRoutesShareOneBucket() = testApplication {
+    @Test
+    fun wrappedAndManualRoutesShareOneBucket() = testApplication {
         application {
             install(Authentication) {
                 bearer("account") {
@@ -82,7 +83,8 @@ class RateLimiterTest {
         assertEquals(listOf(cost), response.headers.getAll("X-RateLimit-Cost"))
     }
 
-    @Test fun conflictingNestedPoliciesFailAtSetup() = testApplication {
+    @Test
+    fun conflictingNestedPoliciesFailAtSetup() = testApplication {
         application {
             install(RateLimiter) {
                 policy("one", "1 per second")
@@ -93,7 +95,8 @@ class RateLimiterTest {
         assertFailsWith<IllegalArgumentException> { startApplication() }
     }
 
-    @Test fun useForwardedIdentityOnlyForATrustedPeer() = testApplication {
+    @Test
+    fun useForwardedIdentityOnlyForATrustedPeer() = testApplication {
         // The trusted edge appends the real client address as the last X-Forwarded-For value.
         val trustedPeers = mutableSetOf<String>()
         application {
@@ -123,7 +126,8 @@ class RateLimiterTest {
         assertEquals(HttpStatusCode.OK, request("192.0.2.12"))
     }
 
-    @Test fun storageFailurePropagatesFromTheRoute() = testApplication {
+    @Test
+    fun storageFailurePropagatesFromTheRoute() = testApplication {
         val failure = IllegalStateException("unavailable")
         application {
             install(StatusPages) {

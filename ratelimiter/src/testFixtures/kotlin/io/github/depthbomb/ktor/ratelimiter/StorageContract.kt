@@ -1,10 +1,14 @@
 package io.github.depthbomb.ktor.ratelimiter
 
-import kotlin.test.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.*
 
 /**
  * Exercises a [RateStorage] implementation with paced and burst policies, weighted requests,
